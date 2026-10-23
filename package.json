@@ -1,0 +1,11 @@
+{
+  "name": "retail-kpi-pipeline",
+  "version": "1.0.0",
+  "description": "Retail KPI & Data Quality Intelligence Hub",
+  "scripts": {
+    "dev": "py -3.13 -m streamlit run app.py",
+    "start": "py -3.13 -m streamlit run app.py",
+    "pipeline": "py -3.13 main.py",
+    "test": "py -3.13 -m pytest tests -v"
+  }
+}

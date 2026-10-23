@@ -1,0 +1,56 @@
+2026-10-23 22:31:15,788 [INFO] PipelineRunner - ======================================================================
+2026-10-23 22:31:15,789 [INFO] PipelineRunner - DATA INGESTION, CLEANING & PREPROCESSING PIPELINE INITIATED
+2026-10-23 22:31:15,789 [INFO] PipelineRunner - ======================================================================
+2026-10-23 22:31:15,789 [INFO] src.data_ingestion - Ingesting file: data/raw/retail_sales_raw.csv (Detected format: csv)
+2026-10-23 22:31:15,805 [INFO] src.data_ingestion - Successfully loaded CSV with encoding: utf-8
+2026-10-23 22:31:15,927 [INFO] src.data_ingestion - Dataset Ingested: 12,425 rows, 16 columns, 3.17 MB memory, 10 empty rows detected.
+2026-10-23 22:31:15,927 [INFO] PipelineRunner - Raw dataset successfully ingested: 12,425 records, 16 features.
+2026-10-23 22:31:15,927 [INFO] src.data_cleaning - Starting data cleaning pipeline on 12,425 raw records...
+2026-10-23 22:31:16,050 [INFO] src.data_cleaning - [Empty Rows Removal] ALL: Removed completely unpopulated records (Impacted: 10)
+2026-10-23 22:31:16,088 [INFO] src.data_cleaning - [Placeholder Normalization] ALL_TEXT: Converted invalid string placeholders ('N/A', '?', 'null', blanks) to standard NaN (Impacted: 1,285)
+2026-10-23 22:31:16,107 [INFO] src.data_cleaning - [Duplicate Removal] ALL_COLUMNS: Identified and removed exact full-row duplicate records (Impacted: 180)
+2026-10-23 22:31:16,113 [INFO] src.data_cleaning - [Duplicate Business Key Quarantine] Order_ID: Quarantined records with duplicate Order_ID containing conflicting attributes (Impacted: 70)
+2026-10-23 22:31:16,141 [INFO] src.data_cleaning - [Date Parsing & Quarantine] Order_Date: Isolated records with missing, invalid, or future dates (Impacted: 370)
+2026-10-23 22:31:16,154 [INFO] src.data_cleaning - [Type Coercion] Quantity: Parsed string numbers; 51 non-numeric values converted to NaN (Impacted: 51)
+2026-10-23 22:31:16,196 [INFO] src.data_cleaning - [Discount Scale Alignment] Discount: Normalized decimal fractions (e.g. 0.15) to percentage scale (15.0%) (Impacted: 3,320)
+2026-10-23 22:31:16,209 [INFO] src.data_cleaning - [Text Normalization] Category: Enforced Title Case formatting (Impacted: 11,520)
+2026-10-23 22:31:16,216 [INFO] src.data_cleaning - [Text Normalization] Order_Status: Enforced Title Case and lifecycle status taxonomy (Impacted: 11,677)
+2026-10-23 22:31:16,219 [INFO] src.data_cleaning - [Text Normalization] Payment_Method: Enforced Title Case formatting (Impacted: 11,299)
+2026-10-23 22:31:16,227 [INFO] src.data_cleaning - [City Standardization] City: Mapped city abbreviations and colloquialisms to official names (Impacted: 621)
+2026-10-23 22:31:16,239 [INFO] src.data_cleaning - [Domain Imputation] Category: Imputed missing categories via deterministic product catalog lookup (Impacted: 275)
+2026-10-23 22:31:16,240 [INFO] src.data_cleaning - [Domain Imputation] Discount: Imputed missing discount rates with 0.0% (standard non-discounted pricing) (Impacted: 820)
+2026-10-23 22:31:16,245 [INFO] src.data_cleaning - [Statistical Cost Reconstruction] Cost: Reconstructed missing order costs using unit prices and category margin baselines (Impacted: 622)
+2026-10-23 22:31:16,253 [INFO] src.data_cleaning - [Mode Imputation] Payment_Method: Imputed missing payment channels with mode ('Cash On Delivery') (Impacted: 496)
+2026-10-23 22:31:16,259 [INFO] src.data_cleaning - [Hierarchical Imputation] City: Imputed missing city records using regional modal metropolitan hubs (Impacted: 337)
+2026-10-23 22:31:16,260 [INFO] src.data_cleaning - [Audit Labeling] Customer_Name: Labeled missing customer names as 'Unknown Customer' to avoid fabricating PII (Impacted: 417)
+2026-10-23 22:31:16,262 [INFO] src.data_cleaning - [Mode Imputation] Order_Status: Imputed unassigned order statuses with mode ('Processing') (Impacted: 118)
+2026-10-23 22:31:16,268 [INFO] src.data_cleaning - [Outlier Treatment (Cap)] Quantity: Capped 345 extreme outlier values at conservative threshold (19.00) (Impacted: 345)
+2026-10-23 22:31:16,270 [INFO] src.data_cleaning - [Outlier Treatment (Cap)] Unit_Price: Capped 817 extreme outlier values at conservative threshold (678.03) (Impacted: 817)
+2026-10-23 22:31:16,272 [INFO] src.data_cleaning - [Business Rule Enforcement] Quantity: Identified 375 product return transactions; tagged Transaction_Type='Return' (Impacted: 375)
+2026-10-23 22:31:16,281 [INFO] src.data_cleaning - Cleaning completed: 11,744 clean records retained, 491 records quarantined, 21 audit events logged.
+2026-10-23 22:31:16,281 [INFO] src.feature_engineering - Initiating feature engineering on 11,744 clean records...
+2026-10-23 22:31:16,289 [INFO] src.feature_engineering - Derived 7 temporal features from 'Order_Date'.
+2026-10-23 22:31:16,296 [INFO] src.feature_engineering - Sales Discrepancy Audit: 1501 rows (12.78%) differed from newly calculated Net_Sales. Aligned to mathematically rigorous Net_Sales.
+2026-10-23 22:31:16,327 [INFO] src.feature_engineering - Derived Customer_Purchase_Count, Customer_Total_Spend, and Customer_Segment.
+2026-10-23 22:31:16,327 [INFO] src.feature_engineering - Feature engineering completed. Output columns count: 36
+2026-10-23 22:31:16,327 [INFO] src.data_validation - [PASS] V01 (DATASET): Verify dataset is non-empty and contains records - Failures: 0
+2026-10-23 22:31:16,328 [INFO] src.data_validation - [PASS] V02 (Order_ID): Zero duplicate business primary keys (Order_ID uniqueness) - Failures: 0
+2026-10-23 22:31:16,329 [INFO] src.data_validation - [PASS] V03 (Order_Date): All order dates must be valid ISO datetime objects - Failures: 0
+2026-10-23 22:31:16,329 [INFO] src.data_validation - [PASS] V04 (Order_Date): Order date must not occur in the future - Failures: 0
+2026-10-23 22:31:16,330 [INFO] src.data_validation - [PASS] V05 (Customer_ID): Zero missing Customer_ID identifiers in processed records - Failures: 0
+2026-10-23 22:31:16,330 [INFO] src.data_validation - [PASS] V06 (Unit_Price): Unit_Price must be strictly positive (> $0.00) - Failures: 0
+2026-10-23 22:31:16,330 [INFO] src.data_validation - [PASS] V07 (Discount): Discount rate must be bounded between 0.0% and 100.0% - Failures: 0
+2026-10-23 22:31:16,331 [INFO] src.data_validation - [PASS] V08 (Gross_Sales): Gross_Sales must equal |Quantity| * Unit_Price within $0.05 tolerance - Failures: 0
+2026-10-23 22:31:16,332 [INFO] src.data_validation - [PASS] V09 (Net_Sales): Net_Sales must equal Gross_Sales - Discount_Amount (signed for returns) - Failures: 0
+2026-10-23 22:31:16,333 [INFO] src.data_validation - [PASS] V10 (Category): Category must belong to approved master taxonomy: ['Clothing', 'Furniture', 'Home & Kitchen', 'Office Supplies', 'Technology'] - Failures: 0
+2026-10-23 22:31:16,334 [INFO] src.data_validation - [PASS] V11 (Order_Status): Order_Status must belong to approved lifecycle states: ['Cancelled', 'Delivered', 'Processing', 'Refunded', 'Shipped'] - Failures: 0
+2026-10-23 22:31:16,336 [INFO] src.data_validation - [PASS] V12 (Profit_Margin_Percentage): Profit_Margin_Percentage must not contain infinite values (zero denominator protection) - Failures: 0
+2026-10-23 22:31:16,336 [INFO] src.data_validation - [PASS] V13 (Unit_Price): Extreme prices must be bounded after Winsorizing outlier treatment - Failures: 0
+2026-10-23 22:31:16,369 [INFO] PipelineRunner - Exporting all pipeline outputs...
+2026-10-23 22:31:16,613 [INFO] PipelineRunner - Cleaned dataset saved to: outputs/cleaned_dataset.csv (11,744 records)
+2026-10-23 22:31:16,645 [INFO] PipelineRunner - Quarantined records saved to: outputs/quarantined_records.csv (491 records)
+2026-10-23 22:31:16,647 [INFO] PipelineRunner - Data quality report saved to: outputs/data_quality_report.csv
+2026-10-23 22:31:16,648 [INFO] PipelineRunner - Cleaning summary saved to: outputs/cleaning_summary.csv
+2026-10-23 22:31:16,648 [INFO] PipelineRunner - ======================================================================
+2026-10-23 22:31:16,648 [INFO] PipelineRunner - PIPELINE EXECUTION SUCCESSFULLY COMPLETED
+2026-10-23 22:31:16,648 [INFO] PipelineRunner - ======================================================================

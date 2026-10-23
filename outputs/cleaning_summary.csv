@@ -1,0 +1,9 @@
+Metric,Raw_Dataset,Cleaned_Dataset,Delta
+Total Records (Rows),12425,11744,-681
+Total Features (Columns),16,36,20
+Missing Value Cells,2206,375,-1831
+Missing Value Reduction (%),0.0%,83.0%,+83.0%
+Exact Duplicate Rows,180,0,-180
+Duplicate Business Keys (Order_ID),223,0,-223
+Quarantined Corrupted Records,0,491,491
+Text / String Columns,16,14,-2
